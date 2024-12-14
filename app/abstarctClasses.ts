@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import {step} from "../misc/reporters/step";
+import {step} from "../misc/reporters/Reporter";
 
 export abstract class PageHolder {
     constructor(protected page: Page) { }
@@ -7,7 +7,6 @@ export abstract class PageHolder {
 export abstract class Component extends PageHolder {
     abstract expectLoaded(message?: string): Promise<void>;
 
-    @step
     async isLoaded(): Promise<boolean> {
         try {
             await this.expectLoaded()
@@ -28,7 +27,7 @@ export abstract class AppPage extends Component {
     /**
      * Opens the page in the browser and expectLoaded should pass
      */
-    @step
+    @step('Open browser')
     async open(path?: string) {
         await this.page.goto(path ?? this.pagePath);
         await this.expectLoaded();

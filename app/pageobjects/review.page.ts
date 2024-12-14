@@ -1,6 +1,6 @@
 import { expect } from "@playwright/test";
 import {AppPage} from "../abstarctClasses";
-import {step} from "../../misc/reporters/step";
+import {step} from "../../misc/reporters/Reporter";
 
 export class Review extends AppPage {
     public pagePath = '/shop';
@@ -10,7 +10,7 @@ export class Review extends AppPage {
     commentInput = this.page.getByPlaceholder('Write Review');
     publishButton = this.page.getByRole('button', { name: 'Publish Review' });
 
-    @step
+    @step('Expecting to load')
     async expectLoaded(): Promise<void> {
         await expect(this.starRating(0)).toBeVisible();
         await expect(this.starRating(4)).toBeVisible();
@@ -19,7 +19,7 @@ export class Review extends AppPage {
         await expect(this.publishButton).toBeVisible();
     }
 
-    @step
+    @step('Adding new comment')
     async add(title: string, comment: string, stars: number) {
         await this.expectLoaded();
 
@@ -29,7 +29,7 @@ export class Review extends AppPage {
         await this.publishButton.click();
     }
 
-    @step
+    @step('Validating added review')
     async expectReviewAdded() {
         await expect(this.page.getByRole('heading', { name: 'Your review has been added' })).toBeVisible();
     }
